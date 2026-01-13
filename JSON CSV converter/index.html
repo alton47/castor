@@ -1,51 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>CSV ↔ JSON Converter</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <h1>CSV ↔ JSON Converter</h1>
 
-  <!-- CSV to JSON -->
-  <section>
-    <h2>CSV to JSON</h2>
+  <div class="controls">
+    <button id="toggleModeBtn">JSON → CSV</button>
+  </div>
 
-    <input type="file" id="csvFile" accept=".csv">
-    <br><br>
+  <div id="dropZone" class="drop-zone">
+    <p id="modeLabel">CSV → JSON</p>
+    <textarea
+      id="inputArea"
+      placeholder="Paste input here or drag & drop a file"
+    ></textarea>
+  </div>
 
-    <textarea id="csvInput" placeholder="Paste CSV here..."></textarea>
-    <br>
+  <button id="convertBtn">Convert</button>
 
-    <button onclick="convertCSVtoJSON()">Convert</button>
+  <textarea
+    id="outputArea"
+    placeholder="Output will appear here..."
+    readonly
+  ></textarea>
 
-    <textarea id="jsonOutput" placeholder="JSON output..." readonly></textarea>
-    <br>
+  <div class="actions">
+    <button id="copyBtn">Copy Output</button>
+    <button id="downloadBtn">Download Output</button>
+  </div>
 
-    <button onclick="downloadJSON()">Download JSON</button>
-  </section>
-
-  <hr>
-
-  <!-- JSON to CSV -->
-  <section>
-    <h2>JSON to CSV</h2>
-
-    <input type="file" id="jsonFile" accept=".json">
-    <br><br>
-
-    <textarea id="jsonInput" placeholder="Paste JSON here..."></textarea>
-    <br>
-
-    <button onclick="convertJSONtoCSV()">Convert</button>
-
-    <textarea id="csvOutput" placeholder="CSV output..." readonly></textarea>
-    <br>
-
-    <button onclick="downloadCSV()">Download CSV</button>
-  </section>
+  <input type="file" id="fileInput" hidden />
 
   <script src="script.js"></script>
 </body>

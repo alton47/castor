@@ -1,91 +1,150 @@
-// Read CSV file
-document.getElementById("csvFile").addEventListener("change", function () {
-  const reader = new FileReader();
-  reader.onload = () => {
-    document.getElementById("csvInput").value = reader.result;
-  };
-  reader.readAsText(this.files[0]);
+let mode = "csv-to-json";
+
+const toggleModeBtn = document.getElementById("toggleModeBtn");
+const modeLabel = document.getElementById("modeLabel");
+const inputArea = document.getElementById("inputArea");
+const outputArea = document.getElementById("outputArea");
+const convertBtn = document.getElementById("convertBtn");
+const copyBtn = document.getElementById("copyBtn");
+const downloadBtn = document.getElementById("downloadBtn");
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+
+toggleModeBtn.addEventListener("click", () => {
+  const isCSVtoJSON = mode === "csv-to-json";
+
+  if (isCSVtoJSON) {
+  mode = "json-to-csv";
+} else {
+  mode = "csv-to-json";
+}
+  modeLabel.innerText = isCSVtoJSON ? "JSON → CSV" : "CSV → JSON";
+  toggleModeBtn.innerText = isCSVtoJSON
+    ? "Switch to CSV → JSON"
+    : "Switch to JSON → CSV";
+
+  inputArea.value = "";
+  outputArea.value = "";
 });
 
-// Read JSON file
-document.getElementById("jsonFile").addEventListener("change", function () {
-  const reader = new FileReader();
-  reader.onload = () => {
-    document.getElementById("jsonInput").value = reader.result;
-  };
-  reader.readAsText(this.files[0]);
-});
-
-function convertCSVtoJSON() {
-  const csv = document.getElementById("csvInput").value.trim();
-  if (!csv) {
-    alert("Please provide CSV data");
+convertBtn.addEventListener("click", () => {
+  if (!inputArea.value.trim()) {
+    alert("Please provide input data");
     return;
   }
 
-  const lines = csv.split("\n");
+  try {
+    const result =
+      mode === "csv-to-json"
+        ? csvToJson(inputArea.value)
+        : jsonToCsv(inputArea.value);
+
+    outputArea.value = result;
+  } catch (err) {
+    alert(err.message);
+  }
+});
+
+function csvToJson(csvText) {
+  const lines = csvText.trim().split("\n");
   const headers = lines[0].split(",");
 
-  const result = [];
-
-  for (let i = 1; i < lines.length; i++) {
+  const data = lines.slice(1).map(line => {
+    const values = line.split(",");
     const obj = {};
-    const currentLine = lines[i].split(",");
 
-    headers.forEach((header, index) => {
-      obj[header.trim()] = currentLine[index]?.trim();
+    headers.forEach((header, i) => {
+      obj[header.trim()] = values[i]?.trim() || "";
     });
 
-    result.push(obj);
-  }
+    return obj;
+  });
 
-  document.getElementById("jsonOutput").value =
-    JSON.stringify(result, null, 2);
+  ///woooii
+
+  return JSON.stringify(data, null, 2);
 }
 
-function convertJSONtoCSV() {
-  const jsonText = document.getElementById("jsonInput").value.trim();
-  if (!jsonText) {
-    alert("Please provide JSON data");
-    return;
-  }
-
+function jsonToCsv(jsonText) {
   let data;
+
   try {
     data = JSON.parse(jsonText);
   } catch {
-    alert("Invalid JSON");
-    return;
+    throw new Error("Invalid JSON format");
+  }
+
+  if (!Array.isArray(data) || data.length === 0) {
+    throw new Error("JSON must be a non-empty array");
   }
 
   const headers = Object.keys(data[0]);
-  const csvRows = [];
+  const rows = data.map(obj =>
+    headers.map(header => obj[header]).join(",")
+  );
 
-  csvRows.push(headers.join(","));
+  return [headers.join(","), ...rows].join("\n");
+}
 
-  data.forEach(obj => {
-    const row = headers.map(header => obj[header]);
-    csvRows.push(row.join(","));
+dropZone.addEventListener("dragover", e => {
+  e.preventDefault();
+  dropZone.classList.add("dragover");
+});
+
+dropZone.addEventListener("dragleave", () => {
+  dropZone.classList.remove("dragover");
+});
+
+dropZone.addEventListener("drop", e => {
+  e.preventDefault();
+  dropZone.classList.remove("dragover");
+
+  const file = e.dataTransfer.files[0];
+  if (file) readFile(file);
+});
+
+dropZone.addEventListener("click", () => {
+  fileInput.click();
+});
+
+fileInput.addEventListener("change", () => {
+  const file = fileInput.files[0];
+  if (file) readFile(file);
+});
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    inputArea.value = reader.result;
+  };
+  reader.readAsText(file);
+}
+
+copyBtn.addEventListener("click", () => {
+  if (!outputArea.value) {
+    alert("Nothing to copy");
+    return;
+  }
+
+  navigator.clipboard.writeText(outputArea.value);
+  alert("Output copied!");
+});
+
+downloadBtn.addEventListener("click", () => {
+  if (!outputArea.value) {
+    alert("Nothing to download");
+    return;
+  }
+
+  const blob = new Blob([outputArea.value], {
+    type: mode === "csv-to-json"
+      ? "application/json"
+      : "text/csv"
   });
 
-  document.getElementById("csvOutput").value =
-    csvRows.join("\n");
-}
-
-function downloadJSON() {
-  const content = document.getElementById("jsonOutput").value;
-  const blob = new Blob([content], { type: "application/json" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "data.json";
+  link.download = mode === "csv-to-json" ? "data.json" : "data.csv";
   link.click();
-}
+});
 
-function downloadCSV() {
-  const content = document.getElementById("csvOutput").value;
-  const blob = new Blob([content], { type: "text/csv" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = "data.csv";
-  link.click();
-}
