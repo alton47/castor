@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSV ↔ JSON Converter</title>
+  <link rel="stylesheet" href="yourgpt.css" />
+</head>
+<body>
+
+  <div class="container">
+    <h1>CSV ↔ JSON Converter</h1>
+
+    <div class="mode-bar">
+      <span id="modeLabel">CSV → JSON</span>
+      <button id="toggleModeBtn">Switch to JSON → CSV</button>
+    </div>
+
+    <div id="dropZone" class="drop-zone">
+      Drag & drop a file here or <strong>click to select</strong>
+    </div>
+
+    <!-- hidden file input -->
+    <input type="file" id="fileInput" hidden />
+
+    <textarea
+      id="inputArea"
+      placeholder="Paste your input here..."
+    ></textarea>
+
+    <button id="convertBtn">Convert</button>
+
+    <textarea
+      id="outputArea"
+      placeholder="Output will appear here..."
+      readonly
+    ></textarea>
+
+    <div class="actions">
+      <button id="copyBtn">Copy Output</button>
+      <button id="downloadBtn">Download Output</button>
+    </div>
+  </div>
+
+  <script src="yourgpt.js"></script>
+</body>
+</html>
