@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>CSV ↔ JSON Converter</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>CSV ↔ JSON Converter</h1>
+
+  <div class="controls">
+    <button id="toggleModeBtn">JSON → CSV</button>
+  </div>
+
+  <div id="dropZone" class="drop-zone">
+    <p id="modeLabel">CSV → JSON</p>
+    <textarea
+      id="inputArea"
+      placeholder="Paste input here or drag & drop a file"
+    ></textarea>
+  </div>
+
+  <button id="convertBtn">Convert</button>
+
+  <textarea
+    id="outputArea"
+    placeholder="Output will appear here..."
+    readonly
+  ></textarea>
+
+  <div class="actions">
+    <button id="copyBtn">Copy Output</button>
+    <button id="downloadBtn">Download Output</button>
+  </div>
+
+  <input type="file" id="fileInput" hidden />
+
+  <script src="script.js"></script>
+</body>
+</html>
