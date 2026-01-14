@@ -87,9 +87,6 @@ dropZone.addEventListener("drop", e => {
   readFile(file);
 });
 
-// ========================
-// 8. Click to select file
-// ========================
 dropZone.addEventListener("click", () => {
   fileInput.click();
 });
