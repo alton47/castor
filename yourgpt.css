@@ -1,0 +1,64 @@
+body {
+  font-family: system-ui, sans-serif;
+  background: #f6f7f9;
+  margin: 0;
+  padding: 40px;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  background: white;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  text-align: center;
+}
+
+.mode-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.drop-zone {
+  border: 2px dashed #bbb;
+  padding: 16px;
+  text-align: center;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  color: #666;
+  cursor: pointer;
+}
+
+.drop-zone.drag {
+  border-color: #007bff;
+  background: #eef4ff;
+}
+
+textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: 10px;
+  margin-bottom: 12px;
+  resize: vertical;
+}
+
+button {
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+#convertBtn {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}

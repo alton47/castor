@@ -15,6 +15,9 @@ toggleModeBtn.addEventListener("click", () => {
 
   mode = isCSV ? "json-to-csv" : "csv-to-json";
   modeLabel.innerText = isCSV ? "JSON → CSV" : "CSV → JSON";
+  toggleModeBtn.innerText = isCSV
+    ? "Switch to CSV → JSON"
+    : "Switch to JSON → CSV";
 
   inputArea.value = "";
   outputArea.value = "";
@@ -31,7 +34,7 @@ convertBtn.addEventListener("click", () => {
       mode === "csv-to-json"
         ? csvToJson(inputArea.value)
         : jsonToCsv(inputArea.value);
-  } catch {
+  } catch (err) {
     alert("Invalid input format.");
   }
 });
@@ -58,7 +61,10 @@ function csvToJson(text) {
 function jsonToCsv(text) {
   const data = JSON.parse(text);
   const headers = Object.keys(data[0]);
-  const rows = data.map(obj => headers.map(h => obj[h]).join(","));
+  const rows = data.map(obj =>
+    headers.map(h => obj[h]).join(",")
+  );
+
   return [headers.join(","), ...rows].join("\n");
 }
 
@@ -102,13 +108,11 @@ function readFile(file) {
 }
 
 copyBtn.addEventListener("click", () => {
-  if (!outputArea.value) return alert("Nothing to copy.");
   navigator.clipboard.writeText(outputArea.value);
+  alert("Copied!");
 });
 
 downloadBtn.addEventListener("click", () => {
-  if (!outputArea.value) return alert("Nothing to download.");
-
   const blob = new Blob([outputArea.value], { type: "text/plain" });
   const link = document.createElement("a");
 

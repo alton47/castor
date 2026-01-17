@@ -1,45 +1,166 @@
+* { 
+  box-sizing: border-box; 
+}
+
 body {
-  font-family: Arial, sans-serif;
-  max-width: 900px;
-  margin: auto;
-  padding: 20px;
+  font-family: system-ui, sans-serif;
+  background: #ffffff;
+  margin: 0;
+  padding: 32px 12px;
+  color: #111827;
+}
+
+.container {
+  max-width: 640px;              
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.mode-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+}
+
+.drop-zone {
+  border: 1px dashed #d1d5db;    
+  border-radius: 10px;
+  padding: 18px 14px;
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 12px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.drop-zone:hover {
+  background: #fafafa;
+}
+
+.drop-zone.drag {
+  background: #f3f4f6;
+  border-color: #9ca3af;
+}
+
+.drop-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.drop-sub {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+.panel {
+  margin-bottom: 10px;
+}
+
+.label {
+  display: block;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 6px;
 }
 
 textarea {
   width: 100%;
-  height: 140px;
-  margin-top: 10px;
-  padding: 8px;
-  font-family: monospace;
+  min-height: 176px; 
+  padding: 10px 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  resize: vertical;
 }
 
-button {
-  padding: 8px 14px;
+textarea:focus {
+  outline: none;
+  border-color: #9ca3af;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 12px;
+}
+
+.spacer { flex: 1; }
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 8px 10px;            
+  font-size: 0.9rem;
   cursor: pointer;
+  background: #ffffff;
 }
 
-.controls,
-.actions {
-  margin-bottom: 12px;
+.btn-primary {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
 }
 
-.actions button {
-  margin-right: 8px;
+.btn-primary:hover {
+  opacity: 0.92;
 }
 
-.drop-zone {
-  border: 2px dashed #999;
-  padding: 12px;
-  margin-bottom: 10px;
+.btn-ghost {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #111827;
 }
 
-.drop-zone.dragover {
-  background-color: #f3f3f3;
-  border-color: #333;
+.btn-ghost:hover {
+  background: #f9fafb;
 }
 
-.drop-zone p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
+.output-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.btn-copy {
+  background: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+}
+
+.btn-copy:hover {
+  opacity: 0.92;
+}
+
+.btn-download {
+  background: #10b981;
+  color: #ffffff;
+  border-color: #10b981;
+}
+
+.btn-download:hover {
+  opacity: 0.92;
 }

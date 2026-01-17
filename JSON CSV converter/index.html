@@ -3,38 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <title>CSV ↔ JSON Converter</title>
+  <link rel="icon" href="https://www.dreamstime.com/data-transfer-symbol-circular-arrows-around-document-icon-file-management-processing-depicts-two-documents-forming-image388238230" type="image/png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <h1>CSV ↔ JSON</h1>
 
-  <h1>CSV ↔ JSON Converter</h1>
+    <div class="mode-bar">
+      <span id="modeLabel" class="badge">CSV → JSON</span>
+      <button id="toggleModeBtn" class="btn btn-ghost">Switch</button>
+    </div>
 
-  <div class="controls">
-    <button id="toggleModeBtn">JSON → CSV</button>
+    <div id="dropZone" class="drop-zone">
+      <div class="drop-title">Drag & drop a file here</div>
+      <div class="drop-sub">or click to select a file</div>
+    </div>
+
+    <input type="file" id="fileInput" hidden />
+
+    <div class="panel">
+      <label class="label">Input</label>
+      <textarea id="inputArea" placeholder="Paste CSV or JSON here..."></textarea>
+    </div>
+
+    <button id="convertBtn" class="btn btn-primary">Convert</button>
+
+    <div class="panel">
+      <label class="label">Output</label>
+      <textarea id="outputArea" placeholder="Output will appear here..." readonly></textarea>
+
+      <div class="output-actions">
+        <button id="copyBtn" class="btn btn-copy">Copy</button>
+        <button id="downloadBtn" class="btn btn-download">Download</button>
+      </div>
+    </div>
   </div>
-
-  <div id="dropZone" class="drop-zone">
-    <p id="modeLabel">CSV → JSON</p>
-    <textarea
-      id="inputArea"
-      placeholder="Paste input here or drag & drop a file"
-    ></textarea>
-  </div>
-
-  <button id="convertBtn">Convert</button>
-
-  <textarea
-    id="outputArea"
-    placeholder="Output will appear here..."
-    readonly
-  ></textarea>
-
-  <div class="actions">
-    <button id="copyBtn">Copy Output</button>
-    <button id="downloadBtn">Download Output</button>
-  </div>
-
-  <input type="file" id="fileInput" hidden />
 
   <script src="script.js"></script>
 </body>
