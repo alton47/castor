@@ -1,7 +1,7 @@
 let mode = "csv-to-json";
 
-const toggleModeBtn = document.getElementById("toggleModeBtn");
 const modeLabel = document.getElementById("modeLabel");
+const toggleModeBtn = document.getElementById("toggleModeBtn");
 const inputArea = document.getElementById("inputArea");
 const outputArea = document.getElementById("outputArea");
 const convertBtn = document.getElementById("convertBtn");
@@ -11,17 +11,10 @@ const dropZone = document.getElementById("dropZone");
 const fileInput = document.getElementById("fileInput");
 
 toggleModeBtn.addEventListener("click", () => {
-  const isCSVtoJSON = mode === "csv-to-json";
+  const isCSV = mode === "csv-to-json";
 
-  if (isCSVtoJSON) {
-  mode = "json-to-csv";
-} else {
-  mode = "csv-to-json";
-}
-  modeLabel.innerText = isCSVtoJSON ? "JSON → CSV" : "CSV → JSON";
-  toggleModeBtn.innerText = isCSVtoJSON
-    ? "Switch to CSV → JSON"
-    : "Switch to JSON → CSV";
+  mode = isCSV ? "json-to-csv" : "csv-to-json";
+  modeLabel.innerText = isCSV ? "JSON → CSV" : "CSV → JSON";
 
   inputArea.value = "";
   outputArea.value = "";
@@ -29,78 +22,63 @@ toggleModeBtn.addEventListener("click", () => {
 
 convertBtn.addEventListener("click", () => {
   if (!inputArea.value.trim()) {
-    alert("Please provide input data");
+    alert("Please provide input data.");
     return;
   }
 
   try {
-    const result =
+    outputArea.value =
       mode === "csv-to-json"
         ? csvToJson(inputArea.value)
         : jsonToCsv(inputArea.value);
-
-    outputArea.value = result;
-  } catch (err) {
-    alert(err.message);
+  } catch {
+    alert("Invalid input format.");
   }
 });
 
-function csvToJson(csvText) {
-  const lines = csvText.trim().split("\n");
+function csvToJson(text) {
+  const lines = text.trim().split("\n");
   const headers = lines[0].split(",");
+  const result = [];
 
-  const data = lines.slice(1).map(line => {
-    const values = line.split(",");
+  for (let i = 1; i < lines.length; i++) {
+    const values = lines[i].split(",");
     const obj = {};
 
-    headers.forEach((header, i) => {
-      obj[header.trim()] = values[i]?.trim() || "";
-    });
+    for (let j = 0; j < headers.length; j++) {
+      obj[headers[j]] = values[j];
+    }
 
-    return obj;
-  });
+    result.push(obj);
+  }
 
-  ///woooii
-
-  return JSON.stringify(data, null, 2);
+  return JSON.stringify(result, null, 2);
 }
 
-function jsonToCsv(jsonText) {
-  let data;
-
-  try {
-    data = JSON.parse(jsonText);
-  } catch {
-    throw new Error("Invalid JSON format");
-  }
-
-  if (!Array.isArray(data) || data.length === 0) {
-    throw new Error("JSON must be a non-empty array");
-  }
-
+function jsonToCsv(text) {
+  const data = JSON.parse(text);
   const headers = Object.keys(data[0]);
-  const rows = data.map(obj =>
-    headers.map(header => obj[header]).join(",")
-  );
-
+  const rows = data.map(obj => headers.map(h => obj[h]).join(","));
   return [headers.join(","), ...rows].join("\n");
 }
 
 dropZone.addEventListener("dragover", e => {
   e.preventDefault();
-  dropZone.classList.add("dragover");
+  dropZone.classList.add("drag");
 });
 
 dropZone.addEventListener("dragleave", () => {
-  dropZone.classList.remove("dragover");
+  dropZone.classList.remove("drag");
 });
 
 dropZone.addEventListener("drop", e => {
   e.preventDefault();
-  dropZone.classList.remove("dragover");
+  dropZone.classList.remove("drag");
 
   const file = e.dataTransfer.files[0];
-  if (file) readFile(file);
+  if (!file) return;
+
+  readFile(file);
 });
 
 dropZone.addEventListener("click", () => {
@@ -109,7 +87,10 @@ dropZone.addEventListener("click", () => {
 
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
-  if (file) readFile(file);
+  if (!file) return;
+
+  readFile(file);
+  fileInput.value = "";
 });
 
 function readFile(file) {
@@ -121,30 +102,17 @@ function readFile(file) {
 }
 
 copyBtn.addEventListener("click", () => {
-  if (!outputArea.value) {
-    alert("Nothing to copy");
-    return;
-  }
-
+  if (!outputArea.value) return alert("Nothing to copy.");
   navigator.clipboard.writeText(outputArea.value);
-  alert("Output copied!");
 });
 
 downloadBtn.addEventListener("click", () => {
-  if (!outputArea.value) {
-    alert("Nothing to download");
-    return;
-  }
+  if (!outputArea.value) return alert("Nothing to download.");
 
-  const blob = new Blob([outputArea.value], {
-    type: mode === "csv-to-json"
-      ? "application/json"
-      : "text/csv"
-  });
-
+  const blob = new Blob([outputArea.value], { type: "text/plain" });
   const link = document.createElement("a");
+
   link.href = URL.createObjectURL(blob);
-  link.download = mode === "csv-to-json" ? "data.json" : "data.csv";
+  link.download = mode === "csv-to-json" ? "output.json" : "output.csv";
   link.click();
 });
-
